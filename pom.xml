@@ -41,9 +41,9 @@
     <myfaces23x.version>2.3-next-M6</myfaces23x.version>
 
     <mojarra23.version>2.3.17</mojarra23.version>
-    <openwebbeans.version>2.0.24</openwebbeans.version>
+    <openwebbeans.version>2.0.25</openwebbeans.version>
     <slf4j.version>1.7.32</slf4j.version>
-    <logback.version>1.2.7</logback.version>
+    <logback.version>1.2.10</logback.version>
     <maven.compile.source>1.8</maven.compile.source>
     <maven.compile.target>1.8</maven.compile.target>
     <maven.compile.encoding>UTF-8</maven.compile.encoding>
@@ -57,8 +57,8 @@
 
     <!-- Note: defined here in master pom, because of problems with enforcer plugin -->
     <jetty.version>9.4.44.v20210927</jetty.version>
-    <joinfaces.version>4.6.1</joinfaces.version>
-    <spring-boot.version>2.6.1</spring-boot.version>
+    <joinfaces.version>4.6.2</joinfaces.version>
+    <spring-boot.version>2.6.2</spring-boot.version>
 
   </properties>
 
@@ -888,7 +888,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-scm-plugin</artifactId>
-          <version>1.12.0</version>
+          <version>1.12.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -915,6 +915,7 @@
 
               <!-- jsf.js XXX check for official release -->
               <exclude>**/jsf.js</exclude>
+              <exclude>**/tobago.js</exclude>
 
               <!-- jettykeystore -->
               <exclude>**/jettykeystore</exclude>
@@ -995,7 +996,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.9.1</version>
+          <version>3.10.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -1014,7 +1015,7 @@
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>6.5.0</version>
+          <version>6.5.2</version>
           <configuration>
             <failBuildOnCVSS>0</failBuildOnCVSS>
             <suppressionFile>tobago/dependency-check-suppression-for-tobago-5.x.xml</suppressionFile>
@@ -1030,7 +1031,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>buildnumber-maven-plugin</artifactId>
-          <version>1.4</version>
+          <version>3.0.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
