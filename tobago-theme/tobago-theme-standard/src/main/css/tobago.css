@@ -11582,7 +11582,7 @@ tobago-flex-layout > tobago-flex-layout {
 .tobago-label-container > label {
   width: 155px;
 }
-.tobago-label-container > .form-control, .tobago-label-container > .form-control-plaintext,
+.tobago-label-container > .form-control, .tobago-label-container > .form-select, .tobago-label-container > .form-control-plaintext,
 .tobago-label-container > .input-group, .tobago-label-container > .tobago-messages-container {
   flex: 1 0 0px;
 }
@@ -11652,8 +11652,12 @@ tobago-image {
   display: inline-block;
 }
 tobago-image > img {
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: inherit;
+  min-width: inherit;
+  min-height: inherit;
+  max-width: inherit;
+  max-height: inherit;
 }
 
 /* in ----------------------------------------------------------- */
@@ -11784,6 +11788,10 @@ a.tobago-link.dropdown-item img, a.tobago-link.dropdown-item span {
   display: inline-block;
   /* fix for IE11 - :active selector doesn't work for nested elements */
   pointer-events: none;
+}
+
+button.tobago-link {
+  text-align: left;
 }
 
 h1 button.tobago-link, .h1 button.tobago-link, h2 button.tobago-link, .h2 button.tobago-link, h3 button.tobago-link, .h3 button.tobago-link, h4 button.tobago-link, .h4 button.tobago-link, h5 button.tobago-link, .h5 button.tobago-link, h6 button.tobago-link, .h6 button.tobago-link {
@@ -11948,7 +11956,7 @@ tobago-overlay {
   opacity: 0.8;
 }
 tobago-overlay > div {
-  background-color: #8884;
+  background-color: rgba(136, 136, 136, 0.2666666667);
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -12029,6 +12037,15 @@ tobago-popup .modal-content > .card {
 tobago-range {
   align-items: center;
 }
+tobago-range .tobago-tooltip {
+  position: absolute;
+  background-color: #000;
+  color: #fff;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  border-radius: 0.25rem;
+}
+
 .tobago-required label:after,
 label.tobago-required:after {
   content: "*";
@@ -12340,6 +12357,15 @@ p.tobago-separator:after {
 }
 
 /* sheet -------------------------------------------------------------- */
+tobago-sheet {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+tobago-sheet header {
+  overflow-x: hidden;
+  flex-shrink: 0;
+}
 tobago-sheet header table {
   margin-bottom: 0;
 }
@@ -12371,89 +12397,99 @@ tobago-sheet .tobago-body {
   overflow-y: auto;
   flex: 1 1 auto;
 }
-tobago-sheet .tobago-body td {
+tobago-sheet .tobago-body .table {
+  margin-bottom: 0;
+}
+tobago-sheet .tobago-body .table td {
   overflow: hidden;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="0"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="0"] {
   margin-left: 0rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="1"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="1"] {
   margin-left: 1rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="2"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="2"] {
   margin-left: 2rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="3"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="3"] {
   margin-left: 3rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="4"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="4"] {
   margin-left: 4rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="5"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="5"] {
   margin-left: 5rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="6"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="6"] {
   margin-left: 6rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="7"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="7"] {
   margin-left: 7rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="8"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="8"] {
   margin-left: 8rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="9"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="9"] {
   margin-left: 9rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="10"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="10"] {
   margin-left: 10rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="11"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="11"] {
   margin-left: 11rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="12"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="12"] {
   margin-left: 12rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="13"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="13"] {
   margin-left: 13rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="14"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="14"] {
   margin-left: 14rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="15"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="15"] {
   margin-left: 15rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="16"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="16"] {
   margin-left: 16rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="17"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="17"] {
   margin-left: 17rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="18"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="18"] {
   margin-left: 18rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="19"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="19"] {
   margin-left: 19rem;
 }
-tobago-sheet .tobago-body td tobago-tree-node[data-tobago-level="20"] {
+tobago-sheet .tobago-body .table td tobago-tree-node[data-tobago-level="20"] {
   margin-left: 20rem;
 }
-tobago-sheet .tobago-body td > tobago-tree-node {
+tobago-sheet .tobago-body .table td > tobago-out {
+  display: block;
+}
+tobago-sheet .tobago-body .table td > tobago-tree-node {
   display: flex;
   align-items: center;
 }
-tobago-sheet .tobago-body td > tobago-tree-node .tobago-toggle:not(.invisible) {
+tobago-sheet .tobago-body .table td > tobago-tree-node .tobago-toggle:not(.invisible) {
   cursor: pointer;
 }
-tobago-sheet .tobago-body td > tobago-tree-node .tobago-toggle {
+tobago-sheet .tobago-body .table td > tobago-tree-node .tobago-toggle {
   padding-right: 5px;
 }
 tobago-sheet footer {
-  text-align: center;
+  display: flex;
 }
-tobago-sheet .tobago-paging {
+tobago-sheet footer .pagination {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+tobago-sheet footer .pagination .tobago-paging {
   cursor: pointer;
 }
-tobago-sheet .tobago-paging input {
+tobago-sheet footer .pagination .tobago-paging input {
   text-align: center;
   display: none;
   margin: -4px 0;
@@ -12475,15 +12511,6 @@ tobago-sheet .tobago-paging input {
 .tobago-descending::after {
   content: "\f22c";
   color: inherit;
-}
-
-tobago-sheet {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-tobago-sheet .table {
-  margin-bottom: 0;
 }
 
 .tobago-tableLayout-fixed {
@@ -12574,6 +12601,22 @@ tobago-tab-group tobago-tab > .nav-link > img + span {
 }
 tobago-tab-group tobago-tab > .nav-link > i + span {
   margin-left: 0.4em;
+}
+
+tobago-textarea {
+  display: block;
+}
+tobago-textarea textarea.border-danger:focus {
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+tobago-textarea textarea.border-warning:focus {
+  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+tobago-textarea textarea.border-info:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+}
+tobago-textarea textarea:disabled {
+  color: rgba(33, 37, 41, 0.5);
 }
 
 /* tree ---------------------------------------------------------------------- */
@@ -12669,20 +12712,6 @@ tobago-tree-listbox .tobago-level {
 }
 tobago-tree-listbox .tobago-selected {
   width: 100%;
-}
-
-/* textarea --------------------------------------------------------- */
-tobago-textarea textarea.border-danger:focus {
-  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
-}
-tobago-textarea textarea.border-warning:focus {
-  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
-}
-tobago-textarea textarea.border-info:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
-}
-tobago-textarea textarea:disabled {
-  color: rgba(33, 37, 41, 0.5);
 }
 
 /* scroll --------------------------------------------------------- */

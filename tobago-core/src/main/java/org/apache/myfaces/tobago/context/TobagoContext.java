@@ -30,6 +30,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Locale;
@@ -42,13 +44,10 @@ public class TobagoContext implements Serializable {
 
   public static final String BEAN_NAME = "tobagoContext";
 
-  private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  public static final String FOCUS_ID_KEY = "tobago.focusId";
+  public static final String ENCTYPE_KEY = "tobago.enctype";
 
-  private TobagoConfig tobagoConfig;
-  private Theme theme;
-  private UserAgent userAgent;
-  private String focusId;
-  private String enctype;
+  private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /**
    * @deprecated since 5.0.0. Please use {@link org.apache.myfaces.tobago.util.ResourceUtils#getString} in Java or
@@ -76,73 +75,110 @@ public class TobagoContext implements Serializable {
   }
 
   public TobagoConfig getTobagoConfig() {
-    if (tobagoConfig == null) {
-      tobagoConfig = TobagoConfig.getInstance(FacesContext.getCurrentInstance());
-    }
-    return tobagoConfig;
+    return TobagoConfig.getInstance(FacesContext.getCurrentInstance());
   }
 
   public Theme getTheme() {
+    // load it from faces context
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    Theme theme = (Theme) facesContext.getAttributes().get(Theme.THEME_KEY);
+    if (theme != null) {
+      return theme;
+    }
 
-    if (theme == null) {
-      final FacesContext facesContext = FacesContext.getCurrentInstance();
-      final ExternalContext externalContext = facesContext.getExternalContext();
+    final ExternalContext externalContext = facesContext.getExternalContext();
+    final Object request = externalContext.getRequest();
+    final Object session = externalContext.getSession(false);
 
-      final String themeName;
-      final Object request = externalContext.getRequest();
-      if (request instanceof HttpServletRequest) {
-        themeName = CookieUtils.getThemeNameFromCookie((HttpServletRequest) request);
-      } else {
-        themeName = null;
-      }
-
-      theme = getTobagoConfig().getTheme(themeName);
+    // load theme from session
+    if (session instanceof HttpSession && getTobagoConfig().isThemeSession()) {
+      final String themeName = (String) ((HttpSession) session).getAttribute(Theme.THEME_KEY);
+      theme = getTobagoConfig().getThemeIfExists(themeName);
       if (LOG.isDebugEnabled()) {
-        LOG.debug("theme='{}'", theme.getName());
+        LOG.debug("from session theme='{}'", theme.getName());
       }
     }
+
+    // or load it from cookie
+    if (theme == null) {
+      if (request instanceof HttpServletRequest && getTobagoConfig().isThemeCookie()) {
+        final String themeName = CookieUtils.getThemeNameFromCookie((HttpServletRequest) request);
+        theme = getTobagoConfig().getTheme(themeName);
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("from cookie theme='{}'", theme.getName());
+        }
+      }
+    }
+
+    // or use default
+    if (theme == null) {
+      theme = getTobagoConfig().getDefaultTheme();
+    }
+
+    facesContext.getAttributes().put(Theme.THEME_KEY, theme);
 
     return theme;
   }
 
   public void setTheme(final Theme theme) {
-    this.theme = theme;
+    // save in faces context
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    facesContext.getAttributes().put(Theme.THEME_KEY, theme);
+
+    final ExternalContext externalContext = facesContext.getExternalContext();
+    final Object request = externalContext.getRequest();
+    final Object response = externalContext.getResponse();
+    final Object session = externalContext.getSession(false);
+
+    // save theme in cookie
+    if (response instanceof HttpServletResponse && request instanceof HttpServletRequest
+        && getTobagoConfig().isThemeCookie()) {
+      CookieUtils.setThemeNameToCookie((HttpServletRequest) request, (HttpServletResponse) response, theme.getName());
+    }
+    // save theme in session
+    if (session instanceof HttpSession && getTobagoConfig().isThemeSession()) {
+      ((HttpSession) session).setAttribute(Theme.THEME_KEY, theme.getName());
+    }
   }
 
   public UserAgent getUserAgent() {
 
-    if (userAgent == null) {
-      final FacesContext facesContext = FacesContext.getCurrentInstance();
-      final ExternalContext externalContext = facesContext.getExternalContext();
+    UserAgent userAgent;
 
-      final String requestUserAgent = externalContext.getRequestHeaderMap().get("User-Agent");
-      userAgent = UserAgent.getInstance(requestUserAgent);
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("userAgent='" + userAgent + "' from header " + "'User-Agent: " + requestUserAgent + "'");
-      }
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    final ExternalContext externalContext = facesContext.getExternalContext();
+
+    final String requestUserAgent = externalContext.getRequestHeaderMap().get("User-Agent");
+    userAgent = UserAgent.getInstance(requestUserAgent);
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("userAgent='" + userAgent + "' from header " + "'User-Agent: " + requestUserAgent + "'");
     }
 
     return userAgent;
   }
 
   public void setUserAgent(final UserAgent userAgent) {
-    this.userAgent = userAgent;
+    LOG.warn("Setting user agent ignored! param={}", userAgent);
   }
 
   public String getFocusId() {
-    return focusId;
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    return (String) facesContext.getAttributes().get(FOCUS_ID_KEY);
   }
 
   public void setFocusId(final String focusId) {
-    this.focusId = focusId;
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    facesContext.getAttributes().put(FOCUS_ID_KEY, focusId);
   }
 
   public String getEnctype() {
-    return enctype;
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    return (String) facesContext.getAttributes().get(ENCTYPE_KEY);
   }
 
   public void setEnctype(final String enctype) {
-    this.enctype = enctype;
+    final FacesContext facesContext = FacesContext.getCurrentInstance();
+    facesContext.getAttributes().put(ENCTYPE_KEY, enctype);
   }
 
   public static TobagoContext getInstance(final FacesContext facesContext) {

@@ -400,7 +400,7 @@ tobago-flex-layout {
   }
 
   > {
-    .form-control, .form-control-plaintext,
+    .form-control, .form-select, .form-control-plaintext,
     .input-group, .tobago-messages-container {
       flex: 1 0 0px;
     }
@@ -485,8 +485,12 @@ tobago-image {
   display: inline-block;
 
   > img {
-    width: 100%;
-    height: 100%;
+    width: inherit;
+    height: inherit;
+    min-width: inherit;
+    min-height: inherit;
+    max-width: inherit;
+    max-height: inherit;
   }
 }
 
@@ -621,6 +625,10 @@ a.tobago-link.dropdown-item {
     display: inline-block; /* fix for IE11 - :active selector doesn't work for nested elements */
     pointer-events: none;
   }
+}
+
+button.tobago-link {
+  text-align: left;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -908,6 +916,15 @@ tobago-range {
 
   .tobago-range {
   }
+
+  .tobago-tooltip {
+    position: absolute;
+    background-color: $black;
+    color: $white;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    border-radius: 0.25rem;
+  }
 }
 
 .tobago-required label:after,
@@ -1085,6 +1102,7 @@ tobago-select-boolean-toggle {
 /* selectOneChoice --------------------------------------------------------- */
 tobago-select-one-choice {
   display: block;
+
   select {
     @include formControlDisabled();
   }
@@ -1242,11 +1260,17 @@ p.tobago-separator {
 /* sheet -------------------------------------------------------------- */
 
 tobago-sheet {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacer;
 
   .tobago-expanded {
   }
 
   header {
+    overflow-x: hidden;
+    flex-shrink: 0; //if "column" attribute used: header must remain same height (fix overflow hidden)
+
     table {
       margin-bottom: 0;
 
@@ -1285,40 +1309,51 @@ tobago-sheet {
     overflow-y: auto;
     flex: 1 1 auto;
 
-    td {
-      overflow: hidden;
+    .table {
+      margin-bottom: 0; //remove bootstrap styling; margins are set on tobago-sheet
 
-      @include treeNodeMarginLeftLevel();
+      td {
+        overflow: hidden;
 
-      > tobago-tree-node {
-        display: flex;
-        align-items: center;
+        @include treeNodeMarginLeftLevel();
 
-        @include tobagoTreeNodeToggle();
+        > tobago-out {
+          display: block;
+        }
 
-        .tobago-toggle {
-          padding-right: 5px;
+        > tobago-tree-node {
+          display: flex;
+          align-items: center;
+
+          @include tobagoTreeNodeToggle();
+
+          .tobago-toggle {
+            padding-right: 5px;
+          }
         }
       }
     }
-
   }
 
   footer {
-    text-align: center;
-  }
+    display: flex;
 
-  .tobago-paging {
-    cursor: pointer;
+    .pagination {
+      margin-top: 1rem;
+      margin-bottom: 0;
 
-    input {
-      text-align: center;
-      display: none;
-      margin: -4px 0;
-      width: 3em;
+      .tobago-paging {
+        cursor: pointer;
+
+        input {
+          text-align: center;
+          display: none;
+          margin: -4px 0;
+          width: 3em;
+        }
+      }
     }
   }
-
 }
 
 .tobago-sortable::after {
@@ -1336,16 +1371,6 @@ tobago-sheet {
 .tobago-descending::after {
   content: $icon-sort-descending;
   color: inherit;
-}
-
-tobago-sheet {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: $spacer;
-
-  .table {
-    margin-bottom: 0;
-  }
 }
 
 .tobago-tableLayout-fixed {
@@ -1454,6 +1479,15 @@ tobago-tab-group {
   }
 }
 
+tobago-textarea {
+  display: block;
+
+  textarea {
+    @include messageShadow();
+    @include formControlDisabled();
+  }
+}
+
 /* tree ---------------------------------------------------------------------- */
 
 tobago-tree {
@@ -1506,12 +1540,6 @@ tobago-tree-listbox {
   .tobago-selected {
     width: 100%;
   }
-}
-
-/* textarea --------------------------------------------------------- */
-tobago-textarea textarea {
-  @include messageShadow();
-  @include formControlDisabled();
 }
 
 /* scroll --------------------------------------------------------- */

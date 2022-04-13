@@ -55,6 +55,8 @@ public class TobagoConfig {
   private Theme defaultTheme;
   private String defaultThemeName;
   private Map<String, ThemeImpl> availableThemes;
+  private boolean themeCookie;
+  private boolean themeSession;
   private boolean createSessionSecret;
   private boolean checkSessionSecret;
   private boolean preventFrameAttacks;
@@ -104,6 +106,8 @@ public class TobagoConfig {
     supportedThemeNames = new ArrayList<>();
     supportedThemes = new ArrayList<>();
     availableThemes = new HashMap<>();
+    themeCookie = true;
+    themeSession = false;
     createSessionSecret = true;
     checkSessionSecret = true;
     preventFrameAttacks = true;
@@ -124,6 +128,9 @@ public class TobagoConfig {
       initDefaultValidatorInfo();
       lock();
 //todo?        servletContext.setAttribute(TobagoConfig.TOBAGO_CONFIG, this);
+      if (LOG.isInfoEnabled()) {
+        LOG.info(this.toString());
+      }
     } catch (final Exception e) {
       final String error = "Tobago can't be initialized! Application will not run correctly!";
       LOG.error(error, e);
@@ -168,6 +175,15 @@ public class TobagoConfig {
       LOG.debug("searching theme: null");
       return defaultTheme;
     }
+    final Theme found = getThemeIfExists(name);
+    if (found != null) {
+      return found;
+    }
+    LOG.debug("searching theme '{}' not found. Using default: {}", name, defaultTheme);
+    return defaultTheme;
+  }
+
+  public Theme getThemeIfExists(final String name) {
     if (defaultTheme != null && defaultTheme.getName().equals(name)) {
       return defaultTheme;
     }
@@ -176,8 +192,7 @@ public class TobagoConfig {
         return theme;
       }
     }
-    LOG.debug("searching theme '{}' not found. Using default: {}", name, defaultTheme);
-    return defaultTheme;
+    return null;
   }
 
   public void setDefaultThemeName(final String defaultThemeName) {
@@ -214,6 +229,22 @@ public class TobagoConfig {
 
   public Map<String, ThemeImpl> getAvailableThemes() {
     return availableThemes;
+  }
+
+  public boolean isThemeCookie() {
+    return themeCookie;
+  }
+
+  public void setThemeCookie(boolean themeCookie) {
+    this.themeCookie = themeCookie;
+  }
+
+  public boolean isThemeSession() {
+    return themeSession;
+  }
+
+  public void setThemeSession(boolean themeSession) {
+    this.themeSession = themeSession;
   }
 
   public boolean isCreateSessionSecret() {
@@ -339,6 +370,10 @@ public class TobagoConfig {
     builder.append(defaultTheme != null ? defaultTheme.getName() : null);
     builder.append(", \navailableThemes=");
     builder.append(availableThemes.keySet());
+    builder.append(", \nthemeCookie=");
+    builder.append(themeCookie);
+    builder.append(", \nthemeSession=");
+    builder.append(themeSession);
     builder.append(", \ncreateSessionSecret=");
     builder.append(createSessionSecret);
     builder.append(", \ncheckSessionSecret=");

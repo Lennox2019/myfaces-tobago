@@ -86,12 +86,12 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
-                <version>2.17.1</version>
+                <version>2.17.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-to-slf4j</artifactId>
-                <version>2.17.1</version>
+                <version>2.17.2</version>
             </dependency>
 
         </dependencies>
@@ -135,7 +135,7 @@
                     <artifactId>jakarta.el</artifactId>
                 </exclusion>
             <!-- tomcat version set where: fix CVE in tomcat-spring-boot-starter -->
-<!--
+                <!--
                 <exclusion>
                     <groupId>org.apache.tomcat.embed</groupId>
                     <artifactId>tomcat-embed-core</artifactId>
@@ -144,36 +144,47 @@
                     <groupId>org.apache.tomcat.embed</groupId>
                     <artifactId>tomcat-embed-jasper</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-websocket</artifactId>
-                </exclusion>
--->
-            </exclusions>
-        </dependency>
-        <!-- tomcat version set where: fix CVE in tomcat-spring-boot-starter -->
-<!--
+              <exclusion>
+                  <groupId>org.apache.tomcat.embed</groupId>
+                  <artifactId>tomcat-embed-websocket</artifactId>
+              </exclusion>
+              -->
+          </exclusions>
+      </dependency>
+      <!-- tomcat version set where: fix CVE in tomcat-spring-boot-starter -->
+        <!--
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.54</version>
+            <version>9.0.60</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <version>9.0.54</version>
+            <version>9.0.60</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
-            <version>9.0.54</version>
+            <version>9.0.60</version>
         </dependency>
--->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency> <!-- add JAXB to run the demo with Java 11 and higher -->
+        -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <exclusions>
+          <exclusion>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.13.2.2</version>
+      </dependency>
+      <dependency> <!-- add JAXB to run the demo with Java 11 and higher -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>

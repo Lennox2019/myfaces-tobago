@@ -41,24 +41,24 @@
     <myfaces23x.version>2.3-next-M6</myfaces23x.version>
 
     <mojarra23.version>2.3.17</mojarra23.version>
-    <openwebbeans.version>2.0.25</openwebbeans.version>
-    <slf4j.version>1.7.33</slf4j.version>
-    <logback.version>1.2.10</logback.version>
+    <openwebbeans.version>2.0.26</openwebbeans.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <logback.version>1.2.11</logback.version>
     <maven.compile.source>1.8</maven.compile.source>
     <maven.compile.target>1.8</maven.compile.target>
     <maven.compile.encoding>UTF-8</maven.compile.encoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <required.maven.version>3.0.4</required.maven.version>
-    <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
-    <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
-    <!-- xxx set back to 15 after release of version 15 (expected october 31, 2021) -->
-    <checkstyle-rules.version>15</checkstyle-rules.version>
+    <maven-pmd-plugin.version>3.16.0</maven-pmd-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+    <!-- XXX use 16, if released -->
+    <checkstyle-rules.version>16</checkstyle-rules.version>
 
     <!-- Note: defined here in master pom, because of problems with enforcer plugin -->
     <jetty.version>9.4.44.v20210927</jetty.version>
-    <joinfaces.version>4.6.3</joinfaces.version>
-    <spring-boot.version>2.6.3</spring-boot.version>
+    <joinfaces.version>4.6.5</joinfaces.version>
+    <spring-boot.version>2.6.6</spring-boot.version>
 
   </properties>
 
@@ -145,230 +145,6 @@
       <post>do not post unless you need to contact PMC on issues not meant for public</post>
     </mailingList>
   </mailingLists>
-
-  <reporting>
-    <excludeDefaults>true</excludeDefaults>
-    <plugins>
-
-      <!--<plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>simian-report-maven-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <configuration>
-          <minimumThreshold>2</minimumThreshold>
-        </configuration>
-      </plugin>
-      -->
-      <!--plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.2</version>
-      </plugin-->
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <tags>
-            <tag>TODO</tag>
-            <tag>FIXME</tag>
-            <tag>XXX</tag>
-            <tag>TBD</tag>
-            <tag>@deprecated</tag>
-          </tags>
-        </configuration>
-      </plugin>
-
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven-checkstyle-plugin.version}</version>
-        <configuration>
-          <configLocation>tobago/checkstyle.xml</configLocation>
-          <headerLocation>default/myfaces-header.txt</headerLocation>
-          <xrefLocation>xref</xrefLocation>
-          <indentSize>2</indentSize>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1</version>
-        <!-- XXX mvn site:site is not working with 2.10.4 -->
-        <!--<version>2.10.4</version>-->
-        <configuration>
-          <linksource>true</linksource>
-          <breakiterator>true</breakiterator>
-          <quiet>true</quiet>
-          <verbose>false</verbose>
-          <source>${maven.compile.source}</source>
-          <charset>${maven.compile.encoding}</charset>
-          <links>
-            <link>http://docs.oracle.com/javase/6/docs/api/</link>
-            <link>http://docs.oracle.com/javaee/6/api/</link>
-            <link>http://www.slf4j.org/apidocs</link>
-            <link>http://junit.sourceforge.net/javadoc/</link>
-            <link>http://logback.qos.ch/apidocs/</link>
-          </links>
-          <excludePackageNames>org.apache.myfaces.tobago.internal.*</excludePackageNames>
-          <!--
-            | bootclasspath required by Sun's JVM
-          -->
-          <bootclasspath>${sun.boot.class.path}</bootclasspath>
-          <additionalparam>
-             -quiet
-             -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
-             -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
-             -hdf project.name "${project.name}"
-             -d ${project.build.directory}/apidocs
-          </additionalparam>
-          <useStandardDocletOptions>false</useStandardDocletOptions>
-          <!--
-            | Apple's JVM sometimes requires more memory
-          -->
-          <additionalJOption>-J-Xmx1024m</additionalJOption>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.22.2</version>
-        <configuration>
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.1.2</version>
-      </plugin>
-
-      <!--plugin>
-        <inherited>false</inherited>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>2.7.1</version>
-        <reportSets>
-          <reportSet>
-            <configuration>
-              <statusIds>Open,In Progress,Reopened</statusIds>
-            </configuration>
-            <reports>
-              <report>jira-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin-->
-
-      <plugin>
-        <inherited>false</inherited>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changelog-plugin</artifactId>
-        <version>2.3</version>
-        <configuration>
-          <basedir>${basedir}</basedir>
-        </configuration>
-      </plugin>
-
-      <!--
-            <plugin>
-              <inherited>false</inherited>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-doap-plugin</artifactId>
-              <configuration>
-                <category>web-framework</category>
-                <language>Java</language>
-                <shortdesc>Set of user interface components based on JSF.</shortdesc>
-                <pmc>http://myfaces.apache.org</pmc>
-              </configuration>
-            </plugin>
-      -->
-
-      <!--plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>clirr-maven-plugin</artifactId>
-        <configuration>
-          <minSeverity>info</minSeverity>
-          <excludes>
-            <exclude>org/apache/myfaces/tobago/example/**</exclude>
-            <exclude>org/apache/myfaces/tobago/ant/**</exclude>
-            <exclude>org/apache/myfaces/tobago/apt/**</exclude>
-          </excludes>
-        </configuration>
-      </plugin-->
-
-      <!-- pmd has problems with annotations -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>${maven-pmd-plugin.version}</version>
-        <configuration>
-          <rulesets>
-            <!-- FIXME: currently only possible to build in project build -->
-            <ruleset>${basedir}/tobago-pmd-config.xml</ruleset>
-          </rulesets>
-          <linkXRef>true</linkXRef>
-          <targetJdk>${maven.compile.source}</targetJdk>
-          <aggregate>true</aggregate>
-        </configuration>
-      </plugin>
-
-      <!-- TODO test dashboard plugin  -->
-      <!--plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>dashboard-maven-plugin</artifactId>
-        <version>1.0.0-beta-1</version>
-      </plugin-->
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.5</version>
-        <configuration>
-          <threshold>Low</threshold>
-          <effort>Max</effort>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jdepend-maven-plugin</artifactId>
-        <version>2.0</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <version>0.13</version>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.2.0</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>analyze-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-
-      <!--plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-linkcheck-plugin</artifactId>
-        <version>1.0.1</version>
-      </plugin-->
-
-    </plugins>
-
-  </reporting>
 
   <dependencyManagement>
     <dependencies>
@@ -468,7 +244,7 @@
       <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>junit-jupiter</artifactId>
-        <version>1.16.2</version>
+        <version>1.16.3</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -611,7 +387,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M3</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>enforce</id>
@@ -799,7 +575,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.9.0</version>
+          <version>3.10.1</version>
           <configuration>
             <source>${maven.compile.source}</source>
             <target>${maven.compile.target}</target>
@@ -813,7 +589,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -839,7 +615,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.3.1</version>
+          <version>3.3.2</version>
           <configuration>
             <source>${maven.compile.source}</source>
             <!-- switched off check in Java 8 -->
@@ -923,13 +699,10 @@
               <!-- prism (tobago-example-demo) -->
               <exclude>**/src/main/webapp/*/prism*.*</exclude>
 
-              <!-- qunit (tobago-example-demo) -->
-              <exclude>**/src/main/webapp/script/qunit*.*</exclude>
-              <exclude>**/src/main/webapp/style/qunit*.*</exclude>
-
               <!-- jasmine (tobago-example-demo) -->
-              <exclude>**/src/main/webapp/script/jasmine-*/*.*</exclude>
-              <exclude>**/src/main/webapp/style/jasmine*.*</exclude>
+              <exclude>**/src/main/webapp/js/boot*.js</exclude>
+              <exclude>**/src/main/webapp/js/jasmine*.js</exclude>
+              <exclude>**/src/main/webapp/css/jasmine.css</exclude>
 
               <!-- log files -->
               <exclude>**/*.log</exclude>
@@ -996,12 +769,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.10.0</version>
+          <version>3.11.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>1.20</version>
+          <version>1.21</version>
         </plugin>
         <!--
         usage: $ mvn versions:display-dependency-updates
@@ -1010,12 +783,12 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>2.9.0</version>
+          <version>2.10.0</version>
         </plugin>
         <plugin>
           <groupId>org.owasp</groupId>
           <artifactId>dependency-check-maven</artifactId>
-          <version>6.5.3</version>
+          <version>7.0.4</version>
           <configuration>
             <failBuildOnCVSS>0</failBuildOnCVSS>
             <suppressionFile>tobago/dependency-check-suppression-for-tobago-5.x.xml</suppressionFile>
